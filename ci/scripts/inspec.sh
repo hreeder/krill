@@ -60,9 +60,9 @@ function progress() {
   echo $'\e[1m'"$@"$'\e[0m'
 }
 
-apk add docker
-
-docker daemon &
-running_container=$(docker run --rm -tid hreeder/krill:testing)
-
 ls
+
+# apk add docker
+
+# docker daemon &
+# running_container=$(docker run --rm -tid hreeder/krill:testing)

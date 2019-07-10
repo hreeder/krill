@@ -29,10 +29,6 @@ jobs:
     trigger: true
   - get: krill
     trigger: true
-  - put: krill-image
-    params:
-      build: krill
-      tag_file: krill/ci/testing_tag
   - task: test
     privileged: true
     file: krill/ci/tasks/inspec.yaml
