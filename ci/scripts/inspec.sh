@@ -69,6 +69,9 @@ running_container=$(docker run --rm -tid hreeder/krill:testing)
 
 cd krill/inspec
 inspec exec . -t docker://$running_container
+inspec_retcode=$?
 
 docker stop $running_container
-kill dockerd
+kill -9 dockerd
+
+exit $inspec_retcode
