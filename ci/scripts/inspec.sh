@@ -66,10 +66,9 @@ dockerd &
 sleep 30 # Wait for dockerd to start
 docker build -t hreeder/krill:testing krill
 running_container=$(docker run --rm -tid hreeder/krill:testing)
-echo $running_container
-echo $(docker ps)
 
 cd krill/inspec
 inspec exec . -t docker://$running_container
 
 docker stop $running_container
+kill dockerd
