@@ -62,7 +62,8 @@ function progress() {
 
 apk add docker
 
-docker daemon &
+dockerd &
+sleep 30 # Wait for dockerd to start
 docker build -t hreeder/krill:testing krill
 running_container=$(docker run --rm -tid hreeder/krill:testing)
 echo $running_container
