@@ -4,7 +4,7 @@ resources:
   type: git
   source:
     uri: https://github.com/hreeder/krill.git
-    branch: develop
+    branch: master
 - name: krill-image
   type: docker-image
   source:
