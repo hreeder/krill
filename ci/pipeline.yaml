@@ -1,0 +1,21 @@
+---
+resources:
+- name: krill
+  type: git
+  source:
+    uri: https://github.com/hreeder/krill.git
+    branch: develop
+- name: krill-image
+  type: docker-image
+  source:
+    repository: hreeder/krill
+    username: ((dockerhub.username))
+    password: ((dockerhub.password))
+
+jobs:
+- name: Build Image
+  plan:
+  - get: krill
+  - put: krill-image
+    params:
+      build: krill
