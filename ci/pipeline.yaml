@@ -2,21 +2,47 @@
 resources:
 - name: krill
   type: git
+  icon: github-circle
   source:
     uri: https://github.com/hreeder/krill.git
     branch: master
+
+- name: ubuntu-rolling
+  type: docker-image
+  icon: docker
+  source:
+    repository: ubuntu
+    tag: rolling
+
 - name: krill-image
   type: docker-image
+  icon: docker
   source:
     repository: hreeder/krill
     username: ((dockerhub.username))
     password: ((dockerhub.password))
 
 jobs:
-- name: Build Image
+- name: Test Image
+  plan:
+  - get: ubuntu-rolling
+    trigger: true
+  - get: krill
+    trigger: true
+  - put: krill-image
+    params:
+      build: krill
+      tag_file: krill/ci/testing_tag
+  - task: test
+    privileged: true
+    file: krill/ci/tasks/inspec.yaml
+
+- name: Publish Built Image
   plan:
   - get: krill
     trigger: true
+    passed:
+      - Test Image
   - put: krill-image
     params:
       build: krill
