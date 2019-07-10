@@ -16,6 +16,7 @@ jobs:
 - name: Build Image
   plan:
   - get: krill
+    trigger: true
   - put: krill-image
     params:
       build: krill
