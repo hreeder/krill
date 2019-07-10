@@ -1,4 +1,4 @@
-
+#!/bin/sh
 function sanitize_cgroups() {
   mkdir -p /sys/fs/cgroup
   mountpoint -q /sys/fs/cgroup || \
