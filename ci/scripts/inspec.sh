@@ -60,12 +60,15 @@ function progress() {
   echo $'\e[1m'"$@"$'\e[0m'
 }
 
-echo "lsing"
-ls
-echo "ls done"
-echo ls
+apk add docker
 
-# apk add docker
+docker daemon &
+docker build -t hreeder/krill:testing krill
+running_container=$(docker run --rm -tid hreeder/krill:testing)
+echo $running_container
+echo $(docker ps)
 
-# docker daemon &
-# running_container=$(docker run --rm -tid hreeder/krill:testing)
+cd krill/inspec
+inspec exec . -t docker://$running_container
+
+docker stop $running_container
