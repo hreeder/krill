@@ -60,7 +60,10 @@ function progress() {
   echo $'\e[1m'"$@"$'\e[0m'
 }
 
+echo "lsing"
 ls
+echo "ls done"
+echo ls
 
 # apk add docker
 
