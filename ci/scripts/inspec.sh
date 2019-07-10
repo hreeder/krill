@@ -72,6 +72,6 @@ inspec exec . -t docker://$running_container
 inspec_retcode=$?
 
 docker stop $running_container
-kill -9 dockerd
+kill -9 $!
 
 exit $inspec_retcode
