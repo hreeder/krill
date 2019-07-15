@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: krill
+spec:
+  selector:
+    matchLabels:
+      app: krill
+  template:
+    metadata:
+      labels:
+        app: krill
+    spec:
+      containers:
+      - name: krill
+        image: hreeder/krill:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "50m"
