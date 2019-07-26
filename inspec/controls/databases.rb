@@ -1,10 +1,8 @@
-control 'network-tools' do
+control 'database-tools' do
     %w(
-        curl
-        dig
-        host
-        http
-        ping
+        pg_dump
+        pg_restore
+        psql
     ).each do |package|
         describe command(package) do
             it { should exist }
