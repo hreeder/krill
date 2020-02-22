@@ -1,0 +1,46 @@
+---
+name: Publish
+on:
+  push:
+    branches:
+    - master
+
+env:
+  DH_IMAGE_ID: hreeder/krill
+
+jobs:
+  build-commit:
+    runs-on: ubuntu-latest
+    name: Build Commit Image
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build Image
+      run: docker build -t image .
+    
+    - name: Publish Commit Image
+      run: |
+        echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u hreeder --password-stdin
+        docker tag image $DH_IMAGE_ID:${{ github.sha }}
+        docker push $DH_IMAGE_ID
+
+  inspec:
+    runs-on: ubuntu-latest
+    name: Inspec Tests
+    needs: build-commit
+    container:
+      image: chef/inspec
+      env:
+        CHEF_LICENSE: accept
+      volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    services:
+      krill:
+        image: hreeder/krill:${{ github.sha }}
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run Inspec
+      run: inspec exec inspec -t docker://${{ job.services.krill.id }}
+
+      # - continue-on-error: true
