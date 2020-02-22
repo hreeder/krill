@@ -44,3 +44,22 @@ jobs:
       run: inspec exec inspec -t docker://${{ job.services.krill.id }}
 
       # - continue-on-error: true
+  promote:
+    runs-on: ubuntu-latest
+    name: Promote to Latest
+    needs: inspec
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install Dependencies
+      run: pip3 install click requests
+    
+    - name: Promote Image
+      run: |
+        echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login -u hreeder --password-stdin
+        docker pull $DH_IMAGE_ID:${{ github.sha }}
+        docker tag $DH_IMAGE_ID:${{ github.sha }} $DH_IMAGE_ID:latest
+        docker push $DH_IMAGE_ID:latest
+
+    - name: Remove Temporary Tag
+      run: python3 scripts/remove-dockerhub-tag.py --username hreeder --token ${{ secrets.DOCKERHUB_ACCESS_TOKEN }} --tag ${{ github.sha }}
